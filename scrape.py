@@ -49,7 +49,6 @@ if not files:
     exit()
 else:
     scrape_pdf(files)
-    print(data)
     csv_file_path = 'carga facturas.csv'
     with open(csv_file_path, mode='w', newline='') as file:
         writer = csv.writer(file)
