@@ -44,7 +44,7 @@ def scrape_pdf(files):
                     iva = re.search(r'[0-9][0-9]', spl[0])
                     iva = iva.group()
             data.append([factura_nun, fecha, cuit, iva, total_bruto_gravado, total_general])
-        #os.rename(directory + f, './scrapeadas/' + f)
+        os.rename(directory + f, './scrapeadas/' + f)
     pass
 
 
