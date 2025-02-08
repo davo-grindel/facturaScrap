@@ -9,9 +9,10 @@ directory = './procesar/'
 data = [['Numero de Factura', 'Fecha', 'C.U.I.T.', 'IVA', 'Total Bruto Gravado', 'Total general']]
 n_ = r'^N°'
 fecha_ = r'^Fecha:'
-t___ = r'^Ventas.portal.Web.Paqueteria.C\.U\.I\.T\.:'
-gravado = r'^Total.Bruto.Gravado'
+t___ = r'^C\.U\.I\.T\.:'
+gravado = r'^IVA..Total.Bruto.Gravado'
 general = r'^Total.General'
+iva_text = r'IVA.\d'
 
 
 def scrape_pdf(files):
@@ -33,13 +34,17 @@ def scrape_pdf(files):
                     cuit = x.group()
                 elif re.match(gravado, split[i]):
                     x = re.split('%', split[i])
-                    y = re.search(r'\d+', x[0])
-                    total_bruto_gravado = y.group()
-                    iva=x[1].lstrip()
+                    y = re.search(r'[0-9][0-9]', x[0])
+                    total_bruto_gravado=x[1].lstrip()
                 elif re.match(general, split[i]):
-                    total_general = split[i-1]
-            data.append([factura_nun, fecha, cuit, total_bruto_gravado, iva, total_general])
-        os.rename(directory + f, './scrapeadas/' + f)
+                    t = re.split(' ', split[i])
+                    total_general = t[2].lstrip()
+                elif re.match(iva_text,split[i]):
+                    spl = re.split('%', split[i])
+                    iva = re.search(r'[0-9][0-9]', spl[0])
+                    iva = iva.group()
+            data.append([factura_nun, fecha, cuit, iva, total_bruto_gravado, total_general])
+        #os.rename(directory + f, './scrapeadas/' + f)
     pass
 
 
